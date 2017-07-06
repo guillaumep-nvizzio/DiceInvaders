@@ -1,0 +1,13 @@
+# Generated output directories
+Binaries/
+Build/Intermediate/
+ipch/
+
+# Generated Visual Studio files
+*.suo
+*.sdf
+*.opensdf
+*.opendb
+*.db
+.localhistory
+.localhistory/
