@@ -29,6 +29,8 @@ public:
 
 private:
 	bool exploded;
+
+	// the rocket vertical speed (pixel per update)
 	static constexpr unsigned kSpeedY = 12;
 };
 

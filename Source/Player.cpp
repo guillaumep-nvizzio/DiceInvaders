@@ -132,7 +132,6 @@ void Player::UpdateInputs(float delta_time)
  - has enough ammo
  - the fire delay has expired
 */
-
 bool Player::CanFireRocket()
 {
 	if (ammo > 0 && last_fire_time <= 0.0f)
@@ -142,6 +141,11 @@ bool Player::CanFireRocket()
 	return false;
 }
 
+/**
+* Fire a rocket from the player position and add the rocket in the list of rockets to be managed.
+*  - Decrease the ammount of ammunition
+*  - Update the user interface
+*/
 void Player::FireRocket()
 {
 	if (CanFireRocket() == true)

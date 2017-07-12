@@ -15,7 +15,6 @@
  *
  **/
 
-
 typedef std::vector<class Bomb *> TBombs;
 typedef std::vector<class Alien *> TAliens;
 
@@ -35,8 +34,8 @@ public:
 	void UpdateBombs(float delta_time);
 
 	int AliensCount();
-private:
 
+private:
 
 	// formation movement
 	void Move();			// sideways
@@ -46,7 +45,6 @@ private:
 	// Firing
 	void IncreaseAttackRate(int amount);
 	bool ShouldDropBomb();
-
 	
 	// Getting aliens objects
 	class Alien * GetOutermostAlien();	// return the alien at the edge of the formation on the Y axis, based on direction, if more than one alien has the same position on the y axis, the first one will be returned.

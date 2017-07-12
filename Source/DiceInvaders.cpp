@@ -93,7 +93,7 @@ int APIENTRY WinMain( HINSTANCE instance, HINSTANCE previousInstance,LPSTR comma
 		lastTime = system->getElapsedTime();
 
 		// 60 FPS ?
-		Sleep(15);
+		Sleep(ENGINE_LOOP_DELAY);
 	}
 
 	return 0;

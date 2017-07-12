@@ -37,9 +37,6 @@ bool UserInterface::Update(float delta_time)
 {
 	switch (state)
 	{
-	case LOBBY:
-		PrintScore();
-		break;
 	case IN_GAME:
 		PrintScore();
 		PrintStats();
@@ -90,10 +87,11 @@ void UserInterface::PrintGameOver()
 
 void UserInterface::UpdateInputs(float delta_time)
 {
-	IDiceInvaders::KeyStatus keys;
-
+	// In case we are in GAME_OVER mode, we listen for inputs to restart the game
 	if (state == GAME_OVER)
 	{
+		IDiceInvaders::KeyStatus keys;
+
 		game->GetSystem()->getKeyStatus(keys);
 
 		if (keys.fire)

@@ -61,6 +61,10 @@ void AlienFormation::Destroy()
 	aliens.clear();
 }
 
+/**
+* Reset the internal values for the alien formation
+*
+*/
 void AlienFormation::Reset()
 {
 	move_direction = false;
@@ -99,15 +103,17 @@ void AlienFormation::Update(float delta_time)
 			game->GetPlayer()->DecreaseHealth(kAlienCollisionDamage);
 		}
 
-		if (alien->IsDead() == false)
-		{
-			alien->Update(delta_time);
-			it++;
-		}
-		else
+		// check if the alien is dead, if so delete it.
+		if (alien->IsDead() == true)
 		{
 			it = aliens.erase(it);
 			delete alien;
+		}
+		// else, increment the iterator
+		else
+		{
+			alien->Update(delta_time);
+			it++;
 		}
 	}
 
@@ -166,6 +172,9 @@ void AlienFormation::Update(float delta_time)
 
 }
 
+/**
+* Update the list of bombs currently on screen.
+*/
 void AlienFormation::UpdateBombs(float delta_time)
 {
 	std::vector<Bomb*>::iterator it = bombs.begin();
@@ -335,7 +344,9 @@ void AlienFormation::IncreaseAttackRate(int amount)
 
 	// cap the bomb ratio to 1 in 10
 	if (bomb_ratio < 10)
+	{
 		bomb_ratio = 10;
+	}
 }
 
 /**
@@ -370,10 +381,12 @@ void AlienFormation::UpdateRocketCollisions(TRockets rockets)
 			bool does_contact = alien->Contains(rocket_pos_x, rocket_pos_y);
 			if (does_contact == true)
 			{
+				// when a rocket hits an alien, the rocket explodes and the alien dies
 				DICE_LOG_INFO("AlienFormation: Rocket hit an alien!");
 				rocket->SetExploded();
 				alien->Die();
 
+				// increase the player score
 				game->GetPlayer()->IncreaseScore(10);
 			}
 		}

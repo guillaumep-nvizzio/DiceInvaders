@@ -68,6 +68,9 @@ void Game::Deinitialize()
 	ending_game = false;
 }
 
+/**
+* Start the game by creating the game objects and updating the internal flags
+*/
 void Game::StartGame()
 {
 	// Create the player, and aliens...
@@ -78,24 +81,23 @@ void Game::StartGame()
 }
 
 /**
-*
+* Set the ending_game flag. On the next frame, the game will restart: cleanup game objects and re-create alien formation
 */
 void Game::EndGame()
 {
 	ending_game = true;
 }
 
+/**
+* Delete the player and the aliens formation game objects
+*/
 void Game::Cleanup()
 {
-	// delete the player and the aliens formation
-
 	delete player;
 	player = nullptr;
 
 	delete aliens;
 	aliens = nullptr;
-	
-	game_ui->SetState(UserInterface::MenuState::GAME_OVER);
 
 	playing = false;
 }
@@ -114,10 +116,16 @@ void Game::CreateAliensFormation()
 	aliens = new AlienFormation(this);
 	assert(aliens != nullptr);
 
-	aliens->Create(5, 5);
+	aliens->Create(kFormationSizeRows, kFormationSizeColumns);
 }
 
-
+/**
+* Update the game:
+*  - system update
+*  - user interface
+*  - when in playing mode: updated the game objects
+*  - if the ending_game flag is set, game is over so cleanup the game objects and set the UI in game over mode
+*/
 bool Game::Update(float delta_time)
 {
 	if (system->update() == false)
@@ -126,8 +134,10 @@ bool Game::Update(float delta_time)
 		return false;
 	}
 
+	// update the user interface
 	UpdateUI(delta_time);
 
+	// update game objects if the game is ni play modes
 	if (playing == true)
 	{
 		UpdateGameObjects(delta_time);
@@ -138,9 +148,13 @@ bool Game::Update(float delta_time)
 		// system->update() will clears the screen and draws all sprites and texts which have been drawn since the last update call.
 		// that is, execute all the draw calls that have been called since the last update.
 		// On cleanup, we need to empty the draw calls queue by calling update, then delete the game objects and make dure no more draw() function calls are made
+		// If we call system->update() with draw calls in the queue and the objects are deleted, it will crash.
 		system->update();
 
  		Cleanup();
+
+		// set the current game state to GAME_OVER, see UserInterface.cpp for details on that state behavior
+		game_ui->SetState(UserInterface::MenuState::GAME_OVER);
 
 		ending_game = false;
 	}
@@ -171,6 +185,7 @@ void Game::UpdateGameObjects(float delta_time)
 		// Update the falling bombs
 		aliens->UpdateBombs(delta_time);
 
+		// reset the game: if no more aliens are present, we re-create the alien formation and reset the internal values for speed and movement
 		if (aliens->AliensCount() == 0)
 		{
 			aliens->Create(5, 5);
@@ -179,6 +194,9 @@ void Game::UpdateGameObjects(float delta_time)
 	}
 }
 
+/**
+* Update the user interface
+*/
 void Game::UpdateUI(float delta_time)
 {
 	if (game_ui != nullptr)
