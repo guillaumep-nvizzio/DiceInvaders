@@ -50,3 +50,4 @@ In terms of code standards, I mainly use the Google style guides (C++, JavaScrip
 Consistency is most important to strive for, the header of the provided library is formated differently from the rest of the projet, but that's about it.
 
 https://github.com/google/styleguide
+ test 
